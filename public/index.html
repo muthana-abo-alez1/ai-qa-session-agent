@@ -20,7 +20,7 @@
         <label class="session-mode">Session mode<select id="session-mode"><option value="random">Random each session</option><option value="replay">Replay first session</option></select></label>
         <label class="time-limit"><span><input id="enableTimeLimit" type="checkbox" /> Enable max time</span><span class="duration-input"><input id="maxDurationSeconds" type="number" min="5" max="3600" value="300" disabled /><small>sec</small></span></label>
         <button id="run" type="submit">Run session</button>
-        <label class="device-mode">Test device<select id="device-mode"><option value="desktop">Desktop</option><option value="mobile">Mobile</option><option value="mixed">Mixed — resize during session</option></select></label>
+        <label class="device-mode">Test device<select id="device-mode"><option value="desktop">Desktop Chrome</option><option value="iphone_13">iPhone 13 — real emulation</option><option value="pixel_7">Google Pixel 7 — real emulation</option><option value="random">Random phone per session</option></select></label>
       </form>
       <label class="ai-toggle"><input id="use-ai-planner" type="checkbox" /><span><strong>Use AI planner</strong><small>Requires an OpenAI API key on the server.</small></span></label>
       <section id="live-log" class="live-log" hidden><div><strong>Live session log</strong><p id="live-log-content">Waiting…</p></div><button id="stop-session" class="secondary danger" type="button">Stop session</button></section>
