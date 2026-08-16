@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI QA Session Agent</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <section id="alert" class="alert" role="alert" hidden></section>
+    <main>
+      <p class="eyebrow">EXPLORATORY QA MVP</p>
+      <h1>AI QA Session Agent</h1>
+      <p class="intro">Run a controlled browser session, record every action, and export the result to Excel.</p>
+      <form id="session-form">
+        <label class="url-field">Website URL<input id="url" type="url" placeholder="https://example.com" required /></label>
+        <label class="session-count">Sessions to run<input id="sessionCount" type="number" min="1" max="50" value="1" /></label>
+        <label class="max-steps">Maximum steps<input id="maxSteps" type="number" min="1" max="500" value="60" /></label>
+        <label class="session-mode">Session mode<select id="session-mode"><option value="random">Random each session</option><option value="replay">Replay first session</option></select></label>
+        <label class="time-limit"><span><input id="enableTimeLimit" type="checkbox" /> Enable max time</span><span class="duration-input"><input id="maxDurationSeconds" type="number" min="5" max="3600" value="300" disabled /><small>sec</small></span></label>
+        <button id="run" type="submit">Run session</button>
+        <label class="device-mode">Test device<select id="device-mode"><option value="desktop">Desktop</option><option value="mobile">Mobile</option><option value="mixed">Mixed — resize during session</option></select></label>
+      </form>
+      <label class="ai-toggle"><input id="use-ai-planner" type="checkbox" /><span><strong>Use AI planner</strong><small>Requires an OpenAI API key on the server.</small></span></label>
+      <section id="live-log" class="live-log" hidden><div><strong>Live session log</strong><p id="live-log-content">Waiting…</p></div><button id="stop-session" class="secondary danger" type="button">Stop session</button></section>
+      <section class="event-controls" aria-labelledby="event-controls-title">
+        <div class="control-heading">
+          <div>
+            <p class="eyebrow">LOCAL PLANNER SETTINGS</p>
+            <h2 id="event-controls-title">Event probabilities</h2>
+          </div>
+          <div class="control-buttons">
+            <select id="preset" aria-label="Action preset"><option value="natural" selected>Default — Natural</option><option value="aggressive">Aggressive</option><option value="input">Input testing</option></select>
+            <button id="reset-events" class="secondary" type="button">Reset defaults</button>
+            <button id="zero-events" class="secondary danger" type="button">Set all to 0%</button>
+          </div>
+        </div>
+        <p class="control-help">The first five events are the basics. “Other actions” is one optional group for clicks, keyboard, toggles, and navigation. Natural scrolling is always active. The total must equal 100%; 0% means it never runs.</p>
+        <p id="probability-status" class="probability-status" role="status"></p>
+        <div id="event-settings" class="event-settings"></div>
+      </section>
+      <p class="notice">Use only on sites you own or are authorized to test. Forms, downloads, purchases, and destructive actions are blocked in this MVP.</p>
+      <section id="result" hidden></section>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>
