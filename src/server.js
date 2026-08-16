@@ -60,7 +60,7 @@ app.post('/api/sessions', async (request, response) => {
     const durationLimit = Number.isFinite(requestedDuration) && requestedDuration > 0
       ? Math.min(Math.max(requestedDuration, 5), 3600)
       : undefined;
-    const selectedDeviceMode = ['desktop', 'mobile', 'mixed'].includes(deviceMode) ? deviceMode : 'desktop';
+    const selectedDeviceMode = ['desktop', 'iphone_13', 'pixel_7', 'random', 'mobile', 'mixed'].includes(deviceMode) ? deviceMode : 'desktop';
     const run = runId ? { events: [], stop: false, status: 'Running' } : undefined;
     if (runId) activeRuns.set(runId, run);
     const results = [];
