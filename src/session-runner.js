@@ -1,4 +1,4 @@
-import { chromium } from 'playwright';
+import { chromium, devices } from 'playwright';
 import { v4 as uuid } from 'uuid';
 import { chooseAction, normalizeActionSettings } from './planner.js';
 import { writeReport } from './excel-report.js';
@@ -12,6 +12,23 @@ const ACTION_LABELS = {
   blank_click: 'Dead Clicks',
   type: 'Input Changed'
 };
+
+const DEVICE_PROFILES = {
+  iphone_13: devices['iPhone 13'],
+  pixel_7: devices['Pixel 7']
+};
+
+export function resolveDeviceProfile(deviceMode) {
+  if (deviceMode === 'random') {
+    return Math.random() < 0.5
+      ? { mode: 'iphone_13', options: DEVICE_PROFILES.iphone_13 }
+      : { mode: 'pixel_7', options: DEVICE_PROFILES.pixel_7 };
+  }
+  if (DEVICE_PROFILES[deviceMode]) return { mode: deviceMode, options: DEVICE_PROFILES[deviceMode] };
+  // Keep the legacy "mobile" option working for any older saved requests.
+  if (deviceMode === 'mobile') return { mode: 'iphone_13', options: DEVICE_PROFILES.iphone_13 };
+  return { mode: 'desktop', options: { viewport: { width: 1280, height: 800 } } };
+}
 
 function assertSafeUrl(value) {
   let parsed;
@@ -433,9 +450,10 @@ export async function runSession({ url, maxSteps = 8, actionSettings = {}, maxDu
   };
   const cursor = { x: 20, y: 20 };
   const browser = await chromium.launch({ headless: process.env.HEADLESS !== 'false' });
-  const context = await browser.newContext(deviceMode === 'mobile'
-    ? { viewport: { width: 390, height: 844 }, isMobile: true }
-    : { viewport: { width: 1280, height: 800 } });
+  const deviceProfile = resolveDeviceProfile(deviceMode);
+  // Device descriptors emulate more than dimensions: browser identity, touch input,
+  // device scale factor and screen metrics all match the selected device.
+  const context = await browser.newContext(deviceProfile.options);
   let closedDuringSession = false;
   let stoppedByUser = false;
   let timeLimitReached = false;
@@ -494,7 +512,7 @@ export async function runSession({ url, maxSteps = 8, actionSettings = {}, maxDu
         throw error;
       }
       pageState.knownPages = [...knownPages];
-      pageState.deviceMode = deviceMode;
+      pageState.deviceMode = deviceProfile.mode;
       pageState.cursor = { ...cursor };
       pageState.backTarget = visitedPages[visitedPageIndex - 1];
       pageState.forwardTarget = visitedPages[visitedPageIndex + 1];
