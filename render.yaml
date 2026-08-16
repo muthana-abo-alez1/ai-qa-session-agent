@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: ai-qa-session-agent
+    runtime: docker
+    healthCheckPath: /
+    envVars:
+      - key: HEADLESS
+        value: "true"
+      - key: APP_USERNAME
+        value: admin
+      - key: APP_PASSWORD
+        generateValue: true

@@ -1,0 +1,19 @@
+{
+  "name": "ai-qa-session-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "exceljs": "^4.4.0",
+    "express": "^5.1.0",
+    "openai": "^5.15.0",
+    "playwright": "^1.55.0",
+    "uuid": "^11.1.0"
+  }
+}
